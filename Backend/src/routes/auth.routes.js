@@ -2,7 +2,6 @@ const express = require ("express")
 
 const router = express.Router()
 
-// in this file we file use router.get instaed of app.get
 // endpoint
 router.get('/signup', (req, res)=>{
     res.send("Signup endoint")

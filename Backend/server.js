@@ -1,20 +1,29 @@
 const dotenv = require("dotenv");
-const express = require ('express')
+const path = require("path");
+const express = require("express");
 
-const authRoutes = require ("./src/routes/auth.routes.js")
-const messagesRoutes = require ("./src/routes/message.routes.js")
+const authRoutes = require("./src/routes/auth.routes.js");
+const messagesRoutes = require("./src/routes/message.routes.js");
 
-dotenv.config()
+dotenv.config();
 
-// Create an express application
-const app =express()
+const app = express();
 
-app.use("/api/auth", authRoutes)
-app.use("/api/messages" , messagesRoutes)
+const rootDir = path.resolve(__dirname, "..");
 
-// Setting port
-const PORT = process.env.PORT || 3000
+app.use("/api/auth", authRoutes);
+app.use("/api/messages", messagesRoutes);
 
-app.listen(PORT, ()=>{
-    console.log("Server is running on port", PORT)
-})
+const PORT = process.env.PORT || 3000;
+
+if (process.env.NODE_ENV === "production") {
+    app.use(express.static(path.join(rootDir, "frontend", "dist")));
+
+    app.use((_, res) => {
+        res.sendFile(path.join(rootDir, "frontend", "dist", "index.html"));
+    });
+}
+
+app.listen(PORT, () => {
+    console.log(`Server is running on port ${PORT}`);
+});

@@ -5,9 +5,9 @@
   "scripts": {
     "dev": "nodemon server.js",
     "start": "node server.js"
-
   },
   "dependencies": {
+    "ai_chat_app": "file:..",
     "bcryptjs": "^3.0.3",
     "cookie-parser": "^1.4.7",
     "dotenv": "^17.4.2",
