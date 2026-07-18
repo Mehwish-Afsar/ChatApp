@@ -7,7 +7,7 @@
     "node": "22.x"
   },
   "scripts": {
-    "build": "npm install --prefix Backend && npm install --prefix Frontend && npm run build --prefix Frontend",
+    "build": "npm install --prefix Backend && cd Frontend && npm install && npm run build && cd ..",
     "start": "npm run start --prefix Backend"
   },
   "repository": {
