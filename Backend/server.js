@@ -17,10 +17,10 @@ app.use("/api/messages", messagesRoutes);
 const PORT = process.env.PORT || 3000;
 
 if (process.env.NODE_ENV === "production") {
-    app.use(express.static(path.join(rootDir, "frontend", "dist")));
+    app.use(express.static(path.join(rootDir, "Frontend", "dist")));
 
     app.use((_, res) => {
-        res.sendFile(path.join(rootDir, "frontend", "dist", "index.html"));
+        res.sendFile(path.join(rootDir, "Frontend", "dist", "index.html"));
     });
 }
 
