@@ -4,19 +4,22 @@ const express = require("express");
 
 const authRoutes = require("./src/routes/auth.routes.js");
 const messagesRoutes = require("./src/routes/message.routes.js");
+const connectDB = require("./src/lib/db.js");
 
-dotenv.config();
+const ENV = require("./src/lib/env.js")
 
 const app = express();
 
 const rootDir = path.resolve(__dirname, "..");
 
+app.use(express.json()) //req.body 
+
 app.use("/api/auth", authRoutes);
 app.use("/api/messages", messagesRoutes);
 
-const PORT = process.env.PORT || 3000;
+const PORT = ENV.PORT || 3000;
 
-if (process.env.NODE_ENV === "production") {
+if (ENV.NODE_ENV === "production") {
     app.use(express.static(path.join(rootDir, "Frontend", "dist")));
 
     app.use((_, res) => {
@@ -26,5 +29,6 @@ if (process.env.NODE_ENV === "production") {
 
 app.listen(PORT, () => {
     console.log(`Server is running on port ${PORT}`);
+    connectDB()
 });
 

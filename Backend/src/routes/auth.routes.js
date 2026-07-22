@@ -1,19 +1,14 @@
 const express = require ("express")
+const {signup, login, logout} = require("../controllers/auth.controllers")
 
 const router = express.Router()
 
 // endpoint
-router.get('/signup', (req, res)=>{
-    res.send("Signup endoint")
-})
+router.post('/signup', signup )
 
-router.get('/login', (req, res)=>{
-    res.send("Login endoint")
-})
+router.post('/login', login )
 
-router.get('/logout', (req, res)=>{
-    res.send("Logout endoint")
-})
+router.post('/logout', logout)
 
 router.get('/update', (req, res)=>{
     res.send("Logout endoint")
