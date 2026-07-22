@@ -1,5 +1,3 @@
-// utils/emailTemplate.js
-
 const emailTemplate = ({ name, clientURL }) => {
   return `
 <!DOCTYPE html>
