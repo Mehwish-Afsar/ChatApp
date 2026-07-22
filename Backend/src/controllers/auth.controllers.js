@@ -3,6 +3,8 @@ const bcrypt = require("bcryptjs");
 const generateToken = require("../lib/utils");
 const { sendWelcomeEmail } = require("../emails/emailHandlers");
 const ENV = require("../lib/env")
+const cloudinary = require("../lib/cloudinary")
+
 
 
 const signup = async (req, res) => {
@@ -88,6 +90,10 @@ const signup = async (req, res) => {
 const login = async (req, res) => {
   const { email, password } = req.body
 
+  if (!email || !password) {
+    return res.status(400).json({ message: "Email and Password are required" })
+  }
+
   try {
     const user = await User.findOne({ email })
     if (!user) {
@@ -119,12 +125,32 @@ const login = async (req, res) => {
 };
 
 const logout = async (_, res) => {
-  res.cookie("jwt", "", {maxAge:0})
-  res.status(400).json({message: "Logged out Successfully"})
+  res.cookie("jwt", "", { maxAge: 0 })
+  res.status(400).json({ message: "Logged out Successfully" })
 };
+
+const updateProfile = async (req, res) => {
+  try {
+    const profilePic = req.body
+    if (!profilePic) {
+      return res.status(400).json({ message: "Profile Pic is required" })
+    }
+    const userId = req.user._id
+    const uploadResponse = await cloudinary.uploader.upload(profilePic)
+    const updatedUser = await User.findbyIdAndUpdate(
+      userId,
+      { profilePic: uploadResponse.secure_url },
+      { new: true}
+      )
+
+  } catch (error) {
+
+  }
+}
 
 module.exports = {
   signup,
   login,
   logout,
+  updateProfile
 };

@@ -6,13 +6,15 @@ const authRoutes = require("./src/routes/auth.routes.js");
 const messagesRoutes = require("./src/routes/message.routes.js");
 const connectDB = require("./src/lib/db.js");
 
-const ENV = require("./src/lib/env.js")
+const ENV = require("./src/lib/env.js");
+const cookieParser = require("cookie-parser");
 
 const app = express();
 
 const rootDir = path.resolve(__dirname, "..");
 
 app.use(express.json()) //req.body 
+app.use(cookieParser)
 
 app.use("/api/auth", authRoutes);
 app.use("/api/messages", messagesRoutes);

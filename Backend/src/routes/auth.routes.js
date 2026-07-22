@@ -1,5 +1,6 @@
 const express = require ("express")
-const {signup, login, logout} = require("../controllers/auth.controllers")
+const {signup, login, logout, updateProfile} = require("../controllers/auth.controllers")
+const protectRoute = require("../middleware/authMiddleware")
 
 const router = express.Router()
 
@@ -10,8 +11,9 @@ router.post('/login', login )
 
 router.post('/logout', logout)
 
-router.get('/update', (req, res)=>{
-    res.send("Logout endoint")
-})
+router.put('/updateProfile', protectRoute, updateProfile)
+
+router.put('/check', protectRoute, (req, res) => res.status(400).json(req.user))
+
 
 module.exports = router;
