@@ -1,4 +1,3 @@
-const dotenv = require("dotenv");
 const path = require("path");
 const express = require("express");
 
@@ -14,7 +13,7 @@ const app = express();
 const rootDir = path.resolve(__dirname, "..");
 
 app.use(express.json()) //req.body 
-app.use(cookieParser)
+app.use(cookieParser())
 
 app.use("/api/auth", authRoutes);
 app.use("/api/messages", messagesRoutes);
