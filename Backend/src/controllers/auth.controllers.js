@@ -142,8 +142,11 @@ const updateProfile = async (req, res) => {
       { profilePic: uploadResponse.secure_url },
       { new: true}
       )
+      return res.status(200).json({message: "Updated User"})
 
   } catch (error) {
+    console.log("Error in updated User", error)
+    return res.status(500).json({message: "Internal Server Error"})
 
   }
 }
