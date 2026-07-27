@@ -1,14 +1,17 @@
 const express = require ("express")
-const {getAllContacts, getChatPartners, getMessageByUserId, sendMessage} = require("../controllers/message.controllers");
+const {getAllContacts, getChatPartner, getMessageByUserId, sendMessage} = require("../controllers/message.controllers");
 const protectRoute = require("../middleware/authMiddleware");
+const arcjetProtection = require("../middleware/arcjetMiddleware");
 
 const router = express.Router()
 
+router.use(arcjetProtection, protectRoute)
+
 // endpoint
-router.get('/contact', protectRoute, getAllContacts)
-// router.get('/chat', getChatPartners)
-// router.get('/:id', getMessageByUserId)
-// router.get('/send/:id', sendMessage)
+router.get('/contact', getAllContacts)
+router.get('/chat', getChatPartner)
+router.get('/:id', getMessageByUserId)
+router.post('/send/:id', sendMessage)
 
 
 module.exports = router;
