@@ -126,7 +126,7 @@ const login = async (req, res) => {
 
 const logout = async (_, res) => {
   res.cookie("jwt", "", { maxAge: 0 })
-  res.status(400).json({ message: "Logged out Successfully" })
+  res.status(200).json({ message: "Logged out Successfully" })
 };
 
 const updateProfile = async (req, res) => {
