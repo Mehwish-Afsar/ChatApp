@@ -4,6 +4,7 @@ const express = require("express");
 const authRoutes = require("./src/routes/auth.routes.js");
 const messagesRoutes = require("./src/routes/message.routes.js");
 const connectDB = require("./src/lib/db.js");
+const cors =require("cors")
 
 const ENV = require("./src/lib/env.js");
 const cookieParser = require("cookie-parser");
@@ -14,6 +15,7 @@ const rootDir = path.resolve(__dirname, "..");
 
 app.use(express.json()) //req.body 
 app.use(cookieParser())
+app.use(cors({origin: ENV.CLIENT_URL, credentials: true}))
 
 app.use("/api/auth", authRoutes);
 app.use("/api/messages", messagesRoutes);
