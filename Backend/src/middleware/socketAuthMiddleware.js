@@ -5,7 +5,7 @@ const User = require("../models/User.js");
 
 const socketAuthMiddleware = async (socket, next) => {
     try {
-        const token = socket.handshake.headers.cookie?.split("; ").find((row) => row.startWith("jwt="))
+        const token = socket.handshake.headers.cookie?.split("; ").find((row) => row.startsWith("jwt="))
             ?.split("=")[1];
         if (!token) {
             console.log("Socket Connection rejected: No token provided")

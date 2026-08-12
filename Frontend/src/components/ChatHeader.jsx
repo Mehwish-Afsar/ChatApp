@@ -1,32 +1,36 @@
 import React, { useEffect } from "react";
 import { useChatStore } from "../store/chatStore";
 import { X } from "lucide-react";
+import { useAuthStore } from "../store/authStore";
 
 function ChatHeader() {
   const { selectedUser, setSelectedUser } = useChatStore();
+  const { onlineUsers } = useAuthStore();
+
+  useEffect(() => {
+    const handleEscKey = (event) => {
+      if (event.key === "Escape") {
+        setSelectedUser(null);
+      }
+    };
+
+    window.addEventListener("keydown", handleEscKey);
+
+    return () => {
+      window.removeEventListener("keydown", handleEscKey);
+    };
+  }, [setSelectedUser]);
 
   if (!selectedUser) {
     return null;
   }
 
-  useEffect(()=>{
-    const handleEscKey = (event) => {
-      if(event.key === "Escape"){
-        setSelectedUser(null)
-      }
-    }
-    
-    window.addEventListener("keydown", handleEscKey)
-
-    // Clean up Function
-    return () => window.removeEventListener("keydown", handleEscKey)
-
-  },[setSelectedUser])
+  const isOnline = onlineUsers.includes(selectedUser._id.toString());
 
   return (
-    <div className="flex justify-between items-center bg-slate-800/50 border-b border-slate-700/50 max-h-[84px] flex-1 px-6">
+    <div className="flex justify-between items-center bg-slate-800/50 border-b border-slate-700/50 max-h-[84px] px-6">
       <div className="flex items-center space-x-3">
-        <div className="avatar avatar-online">
+        <div className={`avatar avatar-${isOnline ? "online" : "offline"}`}>
           <div className="w-12 rounded-full">
             <img
               src={selectedUser.profilePic || "/avatar.png"}
@@ -41,7 +45,7 @@ function ChatHeader() {
           </h3>
 
           <p className="text-slate-400 text-sm">
-            Online
+            {isOnline ? "Online" : "Offline"}
           </p>
         </div>
       </div>
