@@ -8,12 +8,11 @@ const cors =require("cors")
 
 const ENV = require("./src/lib/env.js");
 const cookieParser = require("cookie-parser");
-
-const app = express();
+const {app, server} = require("./src/lib/socket.js")
 
 const rootDir = path.resolve(__dirname, "..");
 
-app.use(express.json()) //req.body 
+app.use(express.json({limit: "5mb"})) //req.body 
 app.use(cookieParser())
 app.use(cors({origin: ENV.CLIENT_URL, credentials: true}))
 
@@ -30,7 +29,7 @@ if (ENV.NODE_ENV === "production") {
     });
 }
 
-app.listen(PORT, () => {
+server.listen(PORT, () => {
     console.log(`Server is running on port ${PORT}`);
     connectDB()
 });

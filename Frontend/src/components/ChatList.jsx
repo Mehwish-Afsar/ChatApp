@@ -15,37 +15,40 @@ function ChatList() {
     getMyChatPartners();
   }, [getMyChatPartners]);
 
-  if (isUserLoading) return <UsersLoadingSkeleton />;
+  if (isUserLoading) {
+    return <UsersLoadingSkeleton />;
+  }
 
-  if (chats.length === 0) return <NoChatFound />;
+  if (chats.length === 0) {
+    return <NoChatFound />;
+  }
 
   return (
     <>
-      {chats.map((chat) => {
-        return (
-          <div
-            key={chat._id}
-            className="bg-cyan-500/10 p-4 rounded-lg cursor-pointer hover:bg-cyan-500/20"
-            onClick={() => setSelectedUser(chat)}
-          >
-            {/* TODO: fix the online status and make it work */}
-            <div className="flex items-center gap-3">
-              <div className={`avatar avatar-online`}>
-                <div className="size-12 rounded-full">
-                  <img
-                    src={chat.profilePic || "/avatar.png"}
-                    alt={chat.fullName}
-                  />
-                </div>
+      {chats.map((chat) => (
+        
+        <div
+          key={chat._id}
+          className="bg-cyan-500/10 p-4 rounded-lg cursor-pointer hover:bg-cyan-500/20"
+          onClick={() => setSelectedUser(chat)}
+          
+        >
+          <div className="flex items-center gap-3">
+            <div className="avatar avatar-online">
+              <div className="w-12 rounded-full">
+                <img
+                  src={chat.profilePic || "/avatar.png"}
+                  alt={chat.fullName}
+                />
               </div>
-
-              <h4 className="text-slate-200 font-medium truncate">
-                {chat.fullName}
-              </h4>
             </div>
+
+            <h4 className="text-slate-200 font-medium truncate">
+              {chat.fullName}
+            </h4>
           </div>
-        );
-      })}
+        </div>
+      ))}
     </>
   );
 }
