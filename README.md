@@ -52,7 +52,7 @@ Chat_App/
 ### 1. Clone the repository
 
 ```bash
-git clone https://github.com/ChatApp/YOUR_REPOSITORY.git
+git clone https://github.com/Mehwish-Afsar/ChatApp.git
 cd ChatApp
 ```
 
@@ -110,19 +110,8 @@ The application will be available at the URL provided by Vite, usually:
 http://localhost:5173
 ```
 
-## 🔒 Environment Variables
-
-Do not commit `.env` files or API keys to GitHub.
-
-Add this to `.gitignore`:
-
-```gitignore
-.env
-node_modules/
-```
-
 ## 👩‍💻 Author
 
 **Mehwish**
 
-Software Engineering Student & MERN Stack Developer
+Software Engineering Student
