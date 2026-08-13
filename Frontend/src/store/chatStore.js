@@ -3,6 +3,8 @@ import { axiosInstance } from "../lib/axios";
 import { useAuthStore } from "./authStore";
 import toast from "react-hot-toast";
 
+const notificationSound = new Audio("./sounds/notification.mp3")
+
 export const useChatStore = create((set, get) => ({
     allContacts: [],
     chats: [],
@@ -76,50 +78,76 @@ export const useChatStore = create((set, get) => ({
     },
 
     sendMessage: async (messageData) => {
-    const { selectedUser } = get();
-    const { authUser } = useAuthStore.getState();
+        const { selectedUser, messages } = get();
+        const { authUser } = useAuthStore.getState();
 
-    const tempId = `temp-${Date.now()}`;
+        const tempId = `temp-${Date.now()}`;
 
-    const optimisticMessage = {
-        _id: tempId,
-        senderId: authUser._id,
-        receiverId: selectedUser._id,
-        text: messageData.text,
-        image: messageData.image,
-        createdAt: new Date().toISOString(),
-        isOptimistic: true,
-    };
+        const optimisticMessage = {
+            _id: tempId,
+            senderId: authUser._id,
+            receiverId: selectedUser._id,
+            text: messageData.text,
+            image: messageData.image,
+            createdAt: new Date().toISOString(),
+            isOptimistic: true,
+        };
 
-    // Show message immediately
-    set((state) => ({
-        messages: [...state.messages, optimisticMessage],
-    }));
-
-    try {
-        const res = await axiosInstance.post(
-            `/messages/send/${selectedUser._id}`,
-            messageData
-        );
-
-        // Replace temporary message with actual database message
         set((state) => ({
-            messages: state.messages.map((msg) =>
-                msg._id === tempId ? res.data : msg
-            ),
+            messages: [...state.messages, optimisticMessage],
         }));
 
-    } catch (error) {
-        toast.error(
-            error.response?.data?.message || "Something Went Wrong"
-        );
+        try {
+            const res = await axiosInstance.post(
+                `/messages/send/${selectedUser._id}`,
+                messageData
+            );
 
-        // Remove failed optimistic message
-        set((state) => ({
-            messages: state.messages.filter(
-                (msg) => msg._id !== tempId
-            ),
-        }));
+            set((state) => ({
+                messages: [
+                    ...state.messages.filter(
+                        (msg) => msg._id !== tempId
+                    ),
+                    res.data
+                ],
+            }));
+
+        } catch (error) {
+            toast.error(
+                error.response?.data?.message ||
+                "Something went wrong"
+            );
+
+            set((state) => ({
+                messages: state.messages.filter(
+                    (msg) => msg._id !== tempId
+                ),
+            }));
+        }
+    },
+    subscribeToMessage: () => {
+        const { selectedUser, isSoundEnabled } = get()
+        if (!selectedUser) return
+
+        const socket = useAuthStore.getState().socket
+
+        socket.on("newMessage", (newMessage) => {
+            const isMessageFromSelectedUser = newMessage.senderId === selectedUser._id
+            if (!isMessageFromSelectedUser) return
+
+            const currentMessages = get().messages
+            set({ messages: [...currentMessages, newMessage] })
+
+            if (isSoundEnabled) {
+                notificationSound.currentTime = 0
+                notificationSound.play().catch((e) => console.log("Audio Failed", e))
+            }
+        })
+    },
+
+    unsubscribeFromMessage: () => {
+        const socket = useAuthStore.getState().socket
+
+        socket.off("newMessage")
     }
-},
 }));

@@ -14,15 +14,24 @@ const io = new Server(server, {
     }
 });
 
+
 // Apply authentication to all Socket connections
 io.use(socketAuthMiddleware);
 
+// Store connected users
 const userSocketMap = {};
+
+// Get socket ID of a specific user
+function getReceiverSocketId(userId) {
+    return userSocketMap[userId];
+}
 
 io.on("connection", (socket) => {
     console.log("A user connected", socket.user.fullName);
 
     const userId = socket.userId;
+
+    // Store user's socket ID
     userSocketMap[userId] = socket.id;
 
     // Send online users to all connected clients
@@ -37,4 +46,10 @@ io.on("connection", (socket) => {
     });
 });
 
-module.exports = { io, app, server };
+module.exports = {
+    io,
+    app,
+    server,
+    getReceiverSocketId,
+    userSocketMap
+};

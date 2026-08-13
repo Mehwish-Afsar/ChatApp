@@ -45,3 +45,8 @@
     transition-colors
 
 }
+
+/* index.css, after your Tailwind/daisyUI import */
+.avatar-offline::before {
+  background-color: #64748b !important; /* slate-500, visible on dark bg */
+}

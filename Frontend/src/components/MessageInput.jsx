@@ -75,7 +75,7 @@ function MessageInput() {
                         />
 
                         <button
-                            onClick={removeImg}
+                            onKeyDown={removeImg}
                             type="button"
                             className="absolute -top-2 -right-2 rounded-full w-6 h-6 bg-slate-800 text-slate-200 hover:bg-slate-700 flex items-center justify-center"
                         >

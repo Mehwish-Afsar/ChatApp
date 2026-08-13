@@ -3,6 +3,7 @@ const User = require("../models/User");
 
 const ENV = require("../lib/env");
 const { cloudinary } = require("../lib/cloudinary");
+const { getReceiverSocketId, io } = require("../lib/socket");
 
 const getAllContacts = async (req, res) => {
     try {
@@ -72,15 +73,15 @@ const sendMessage = async (req, res) => {
         const { id: receiverId } = req.params
         const senderId = req.user._id
 
-        if(senderId.equals(receiverId)){
-            return res.status(400).json({message: "Text or image is required"})
+        if (senderId.equals(receiverId)) {
+            return res.status(400).json({ message: "Text or image is required" })
         }
-        if(!text && !image){
-            return res.status(400).json({message: "Cannot Send Message to yourself"})
+        if (!text && !image) {
+            return res.status(400).json({ message: "Cannot Send Message to yourself" })
         }
-        const receiverExists = await User.exists({_id: receiverId})
-        if(!receiverExists){
-            return res.status(400).json({message: "Receiver not found"})
+        const receiverExists = await User.exists({ _id: receiverId })
+        if (!receiverExists) {
+            return res.status(400).json({ message: "Receiver not found" })
         }
 
         let imageURL;
@@ -99,6 +100,10 @@ const sendMessage = async (req, res) => {
         await newMessage.save()
 
         // todo: Send message in real time using socket.io
+        const receiverSocketId = getReceiverSocketId(receiverId)
+        if (receiverSocketId) {
+            io.to(receiverSocketId).emit("newMessage", newMessage)
+        }
 
         res.status(201).json(newMessage)
 

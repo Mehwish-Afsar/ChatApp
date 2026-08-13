@@ -13,6 +13,8 @@ function ChatContainer() {
     selectedUser,
     messages,
     isMessageLoading,
+    subscribeToMessage,
+    unsubscribeFromMessage,
   } = useChatStore();
 
   const { authUser } = useAuthStore();
@@ -22,7 +24,11 @@ function ChatContainer() {
     if (!selectedUser?._id) return;
 
     getMessageByUserId(selectedUser._id);
-  }, [selectedUser, getMessageByUserId]);
+    subscribeToMessage()
+
+    // Clean up
+    return() => unsubscribeFromMessage()
+  }, [selectedUser, getMessageByUserId, subscribeToMessage, unsubscribeFromMessage]);
 
   return (
     <div className="flex flex-col h-full">
