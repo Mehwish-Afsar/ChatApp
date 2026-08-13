@@ -2,6 +2,10 @@
 
 A full-stack real-time chat application built with **React, Node.js, Express, MongoDB, and Socket.io**.
 
+## 🚀 Live Demo
+
+[**View Live Demo**](https://ai-chatapp-dh2p.onrender.com/)
+
 ## ✨ Features
 
 * 🔐 JWT Authentication
@@ -49,11 +53,11 @@ Chat_App/
 
 ## 🚀 Getting Started
 
-### 1. Clone the repository
+### 1. Clone the Repository
 
 ```bash
 git clone https://github.com/Mehwish-Afsar/ChatApp.git
-cd ChatApp
+cd Chat_App
 ```
 
 ### 2. Install Backend Dependencies
@@ -104,7 +108,7 @@ npm install
 npm run dev
 ```
 
-The application will be available at the URL provided by Vite, usually:
+The frontend will usually run at:
 
 ```text
 http://localhost:5173
@@ -114,4 +118,4 @@ http://localhost:5173
 
 **Mehwish**
 
-Software Engineering Student
+Software Engineering Student & MERN Stack Developer
